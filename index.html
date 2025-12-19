@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Project Tracking – SciLifeLab IDS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --accent: #4C979F;
+      --accent-dark: #3A7A82;
+      --accent-soft: #E6F2F4;
+      --accent-lighter: #F0F7F8;
+      --text-main: #1a1a1a;
+      --text-muted: #5a5a5a;
+      --border: #d0d8da;
+      --bg: #f8fafa;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: var(--bg);
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 2rem;
+      box-sizing: border-box;
+    }
+
+    header.project-header {
+      border-bottom: 3px solid var(--accent);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      background: linear-gradient(to bottom, var(--accent-lighter), transparent);
+      padding: 1rem 1rem;
+      margin: -1rem -1.5rem 1.5rem;
+      border-radius: 0 0 12px 12px;
+      position: relative;
+    }
+
+    .header-logo {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      height: 40px;
+      width: auto;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+
+    .header-logo:hover {
+      opacity: 1;
+    }
+
+    .project-header h1 {
+      font-size: 1.7rem;
+      margin: 0 0 0.25rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 0.15rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .header-logo {
+        height: 30px;
+        top: 1rem;
+        right: 1rem;
+      }
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      box-sizing: border-box;
+      box-shadow: 0 2px 8px rgba(76, 151, 159, 0.08);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(76, 151, 159, 0.12);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: var(--accent-dark);
+      font-weight: 700;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem 1.5rem;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.4rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .meta-label {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .diagram {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    /* Milestone status badges for timeline table */
+
+    .milestone-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .milestone-status-badge.completed {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .milestone-status-badge.in-progress {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .milestone-status-badge.not-started {
+      background: var(--accent-lighter);
+      color: var(--text-muted);
+    }
+
+    .milestone-status-badge a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .milestone-status-badge a:hover {
+      text-decoration: underline;
+    }
+
+
+    footer.project-footer {
+      margin-top: 3rem;
+      border-top: 2px solid var(--accent-soft);
+      padding-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    footer.project-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer.project-footer a:hover {
+      text-decoration: underline;
+    }
+
+    ul {
+      line-height: 1.6;
+      margin-top: 0.25rem;
+    }
+
+    ul li {
+      margin-bottom: 0.2rem;
+    }
+
+    p {
+      margin-top: 0.25rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    table th {
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      background: var(--accent-lighter);
+      color: var(--accent-dark);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    table td {
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    table td.status-cell {
+      white-space: nowrap;
+      width: 1%;
+    }
+
+    table td.activity-cell a {
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    table td.activity-cell a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    table tr.completed-milestone td {
+      opacity: 0.5;
+    }
+
+    table tr.completed-milestone td.activity-cell a {
+      color: var(--text-muted);
+    }
+
+    table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table td:first-child {
+      font-weight: 600;
+      color: var(--accent-dark);
+      white-space: nowrap;
+      width: 1%;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="project-header">
+      <a href="SciLifeLab_Logotype_Green_POS.png" target="_blank" rel="noopener noreferrer">
+        <img 
+          src="SciLifeLab_Logotype_Green_POS.png" 
+          alt="SciLifeLab Logo" 
+          class="header-logo"
+        />
+      </a>
+      <h1>Project Tracking</h1>
+      <div class="subtitle">
+        <span class="meta-label">IDS Area owner:</span> Hanna Kultima, Lars Feuk · <span class="meta-label"> Project leaders:</span> Moa Borén, Wojtek Potrzebowski
+      </div>
+      <div class="meta-row" style="margin-top: 0.5rem;">
+        <div><span class="meta-label">Ready:</span> TBD</div>
+        <div>
+          <span class="meta-label">Resources:</span>
+          TBD
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main class="card">
+        <h2>Scope</h2>
+        <p>Minimal, extensible web-based Project Tracking service for SciLifeLab units with consistent project records, role-based views (users, staff, management), simple lifecycle, milestones, and notifications.</p>
+
+        <h2>Out of scope</h2>
+        <p>Full User Portal functionality; replacement of ordering, billing or LIMS systems; complex workflow automation beyond basic statuses and milestones.</p>
+
+        <h2>Value</h2>
+        <ul>
+          <li>Give users a clear project overview (status, next steps, contacts) to reduce email back-and-forth. Support time management, planning, and adapting to changes.</li>
+          <li>Provide staff and unit leadership with a shared view of project portfolios, workloads, and bottlenecks for planning and reporting. Reduce reporting effort and enable on-demand report creation.</li>
+          <li>Provide SciLifeLab with comparable cross-platform project data and evidence to inform future User Portal and IDS developments.</li>
+        </ul>
+
+        <h2>Main deliverables</h2>
+        <ul>
+          <li>Project Tracking service for the SciLifeLab community (staff and researchers) with clear project overviews, statuses, next steps and contacts.</li>
+          <li>Minimal, robust architecture, data model and integration design enabling interoperability with IAM, Order Portal (or similar) and identifier services.</li>
+          <li>Production-ready web application adopted by 2–4 initial units, expanding to additional units beyond the pilot group by project end.</li>
+        </ul>
+
+        <h2>Dependencies</h2>
+        <ul>
+          <li>Identity and Access Management / LifeScience ID and role models (including privacy, security and audit).</li>
+          <li>Sample and project identifier services (e.g. BioSamples/EMBL-EBI instance, RAiD).</li>
+          <li>Order Portal and relevant unit systems where interoperability adds value.</li>
+          <li>Overall IDS strategy for cross-platform workflows and future automation.</li>
+        </ul>
+      </main>
+
+      <aside>
+        <section class="card">
+          <h2>High-level architecture</h2>
+          <!-- Replace src with the actual path in your repo, e.g. assets/img/... -->
+          <img
+            class="diagram"
+            src="img/FollowUp_projects_outlook.png"
+            alt="Diagram of project tracking: login, web interface, notification system, and data flows from Order Portal, iLAB, FMS and other unit systems."
+          />
+          <p class="muted" style="margin-top:0.5rem;">
+            Simplified view of the project tracking service, integrating existing unit systems
+            (Order Portal, iLAB, FMS, others) into a central project database and web interface.
+          </p>
+        </section>
+
+        <section class="card">
+          <h2>Timelines</h2>
+          <table id="timelines-table">
+            <thead>
+              <tr>
+                <th>Timeline</th>
+                <th>Activity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-activity="Confirm pilot scope and collaboration model with selected units.">
+                <td>TBD</td>
+                <td class="activity-cell">Confirm pilot scope and collaboration model with selected units, team and IDS Area owners.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Introduce concepts and collect insights about success criteria and pitfalls">
+                <td>TBD</td>
+                <td class="activity-cell">Introduce concepts and collect insights about success criteria and pitfalls</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Initial UX concept and key mock-ups for user, staff and management views agreed with pilot units.">
+                <td>TBD</td>
+                <td class="activity-cell">Initial UX concept and key mock-ups for user, staff and management views agreed with pilot units.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Testing and evaluation with users and staff.">
+                <td>TBD</td>
+                <td class="activity-cell">Testing and evaluation with users and staff</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Define MVP architecture, APIs, notification strategy, logging and hosting approach.">
+                <td>TBD</td>
+                <td class="activity-cell">Define MVP architecture, APIs, notification strategy, logging and hosting approach.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Build pilot: core web app for users and staff plus initial integrations (IAM, identifiers).">
+                <td>TBD</td>
+                <td class="activity-cell">Build pilot: core web app for users and staff plus initial integrations (IAM, identifiers).</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Pilot-ready release and onboarding of first units.">
+                <td>TBD</td>
+                <td class="activity-cell">Pilot-ready release and onboarding of first units.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Mid-pilot evaluation and improvements.">
+                <td>TBD</td>
+                <td class="activity-cell">Mid-pilot evaluation and improvements.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Roll-out to additional units.">
+                <td>TBD</td>
+                <td class="activity-cell">Roll-out to additional units.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Final evaluation and next-phase recommendation.">
+                <td>TBD</td>
+                <td class="activity-cell">Final evaluation and next-phase recommendation.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+              <tr data-activity="Launch of Project Tracking as a SciLifeLab service.">
+                <td>TBD</td>
+                <td class="activity-cell">Launch of Project Tracking as a SciLifeLab service and deliver playbook for further attachment of units.</td>
+                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="project-footer">
+      Last updated:
+      <span id="last-updated"></span>
+      · Repository:
+      <a
+        href="https://github.com/wpotrzebowski/ids-project-tracking"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        wpotrzebowski/ids-project-tracking
+      </a>
+    </footer>
+  </div>
+
+  <script>
+    // Milestone monitoring using the public GitHub API.
+    const repoOwner = "wpotrzebowski";
+    const repoName = "ids-project-tracking";
+    const milestonesApiUrl =
+      "https://api.github.com/repos/" +
+      repoOwner +
+      "/" +
+      repoName +
+      "/milestones?state=all&per_page=100";
+
+    function updateLastUpdated() {
+      const el = document.getElementById("last-updated");
+      if (el) {
+        const now = new Date();
+        el.textContent = now.toLocaleString();
+      }
+    }
+
+    // Match milestone title to activity description
+    function findMatchingMilestone(milestones, activityText) {
+      // Try exact match first
+      let match = milestones.find(m => m.title === activityText);
+      if (match) return match;
+      
+      // Try partial match (milestone title contains key words from activity)
+      const activityWords = activityText.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+      match = milestones.find(m => {
+        const titleLower = m.title.toLowerCase();
+        return activityWords.some(word => titleLower.includes(word));
+      });
+      
+      return match;
+    }
+
+    function updateTimelineWithMilestones(milestones) {
+      const table = document.getElementById("timelines-table");
+      if (!table) return;
+
+      const rows = table.querySelectorAll("tbody tr");
+      
+      rows.forEach(function(row) {
+        const activityText = row.getAttribute("data-activity");
+        if (!activityText) return;
+
+        const milestone = findMatchingMilestone(milestones, activityText);
+        const statusCell = row.querySelector(".status-cell");
+        const activityCell = row.querySelector("td:nth-child(2)");
+        
+        if (!statusCell || !activityCell) return;
+
+        if (milestone) {
+      const openIssues = milestone.open_issues || 0;
+      const closedIssues = milestone.closed_issues || 0;
+      const total = openIssues + closedIssues;
+          const completion = total > 0 ? Math.round((closedIssues / total) * 100) : 0;
+          
+          let statusClass = "not-started";
+          let statusText = "○ Not Started";
+          const isCompleted = milestone.state === "closed";
+          
+          if (isCompleted) {
+            statusClass = "completed";
+            statusText = "✓ Completed";
+            row.classList.add("completed-milestone");
+          } else if (completion > 0) {
+            statusClass = "in-progress";
+            statusText = "◐ In Progress";
+          }
+
+          const url = milestone.html_url || 
+            `https://github.com/${repoOwner}/${repoName}/milestone/${milestone.number}`;
+          
+          // Make activity text clickable
+          activityCell.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${activityText}</a>`;
+          
+          // Update status badge
+          statusCell.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer"><span class="milestone-status-badge ${statusClass}">${statusText}</span></a>`;
+        } else {
+          // No milestone found, keep original text
+          activityCell.textContent = activityText;
+          statusCell.innerHTML = '<span class="milestone-status-badge not-started">○ No milestone</span>';
+        }
+      });
+    }
+
+    function loadMilestones() {
+      fetch(milestonesApiUrl)
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("GitHub API error: " + response.status);
+          }
+          return response.json();
+        })
+        .then(function (data) {
+          if (Array.isArray(data) && data.length > 0) {
+            updateTimelineWithMilestones(data);
+          }
+        })
+        .catch(function (error) {
+          console.error("Error loading milestones:", error);
+          // Show error state in timeline
+          const rows = document.querySelectorAll("#timelines-table tbody tr");
+          rows.forEach(function(row) {
+            const statusCell = row.querySelector(".status-cell");
+            if (statusCell) {
+              statusCell.innerHTML = '<span class="milestone-status-badge not-started">Error loading</span>';
+            }
+          });
+        });
+    }
+
+    updateLastUpdated();
+    loadMilestones();
+  </script>
+</body>
+</html>
