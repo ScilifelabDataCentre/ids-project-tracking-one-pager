@@ -38,7 +38,7 @@
       margin-bottom: 1.5rem;
       padding-bottom: 0.75rem;
       background: linear-gradient(to bottom, var(--accent-lighter), transparent);
-      padding: 1rem 1rem;
+      padding: 1rem 8.5rem 0.75rem 1rem;
       margin: -1rem -1.5rem 1.5rem;
       border-radius: 0 0 12px 12px;
       position: relative;
@@ -155,6 +155,86 @@
       background: #fff;
       padding: 0.5rem;
       box-sizing: border-box;
+    }
+
+    .arch {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+    }
+
+    .arch-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .arch-chip,
+    .arch-box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--accent-lighter);
+      color: var(--accent-dark);
+      padding: 0.28rem 0.45rem;
+      line-height: 1.3;
+    }
+
+    .arch-chip {
+      font-weight: 600;
+    }
+
+    .arch-box {
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .arch-box.core {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent-dark);
+      padding: 0.45rem 0.5rem;
+    }
+
+    .arch-box.api {
+      background: var(--accent-soft);
+    }
+
+    .arch-box.later {
+      background: #fff;
+      color: var(--text-muted);
+      border-style: dashed;
+      font-weight: 600;
+    }
+
+    .arch-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem;
+    }
+
+    .arch-step {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.02em;
+    }
+
+    .arch-step::before {
+      content: "↓ ";
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .arch-cross {
+      margin-top: 0.35rem;
+      border-left: 3px solid var(--accent);
+      background: var(--accent-lighter);
+      border-radius: 0 8px 8px 0;
+      padding: 0.4rem 0.55rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      line-height: 1.4;
     }
 
     /* Milestone status badges */
@@ -309,21 +389,20 @@
         <span class="meta-label">IDS Area owner:</span> Hanna Kultima, Lars Feuk · <span class="meta-label"> Project leaders:</span> Moa Borén, Wojtek Potrzebowski
       </div>
       <div class="meta-row" style="margin-top: 0.5rem;">
-        <div><span class="meta-label">Ready:</span> TBD</div>
-        <div>
-          <span class="meta-label">Resources:</span>
-          TBD
-        </div>
+        <div><span class="meta-label">Status:</span> Feasibility study completed; preparing for project launch / implementation phase.</div>
+      </div>
+      <div class="meta-row">
+        <div><span class="meta-label">Resources:</span> Project leads; data/system architect; backend/API developer; data steward / metadata specialist; unit champions; Architecture Board input; UX/service design input.</div>
       </div>
     </header>
 
     <div class="layout">
       <main class="card">
         <h2>Scope</h2>
-        <p>Minimal, extensible web-based Project Tracking service for SciLifeLab units with consistent project records, role-based views (users, staff, management), simple lifecycle, milestones, and notifications.</p>
+        <p>A shared project-data foundation that aligns project information from heterogeneous SciLifeLab unit systems and makes it usable for users, staff and management. The immediate priority is that foundation and a staff-facing use case. A broader user-facing service remains a later step.</p>
 
         <h2>Out of scope</h2>
-        <p>Full User Portal functionality; replacement of ordering, billing or LIMS systems; complex workflow automation beyond basic statuses and milestones.</p>
+        <p>A user-facing interface as the first-phase product; full User Portal functionality; replacement of ordering, billing or LIMS systems; duplicating IAM, identifier services, FAIR metadata, data transfer or repositories; complex workflow automation beyond basic statuses and milestones.</p>
 
         <h2>Value</h2>
         <ul>
@@ -332,34 +411,65 @@
           <li>Provide SciLifeLab with comparable cross-platform project data and evidence to inform future User Portal and IDS developments.</li>
         </ul>
 
+        <h2>Data governance</h2>
+        <p>Governance is a prerequisite and must be clear enough to guide architecture. Across participating organisations this covers ownership and responsibility, access, retention, permissions and management.</p>
+
+        <h2>Identifiers</h2>
+        <p>The foundation needs stable <strong>UserID</strong>, <strong>ProjectID</strong> and <strong>UnitID</strong>, and a way to connect unit-specific work packages and sessions to the common project. These come from shared identifier services rather than a parallel scheme.</p>
+
         <h2>Main deliverables</h2>
         <ul>
-          <li>Project Tracking service for the SciLifeLab community (staff and researchers) with clear project overviews, statuses, next steps and contacts.</li>
-          <li>Minimal, robust architecture, data model and integration design enabling interoperability with IAM, Order Portal (or similar) and identifier services.</li>
-          <li>Production-ready web application adopted by 2–4 initial units, expanding to additional units beyond the pilot group by project end.</li>
+          <li>Minimum common project data model.</li>
+          <li>Project database and data layer.</li>
+          <li>APIs and adapters to unit systems.</li>
+          <li>Data collection and integration playbook.</li>
+          <li>Staff-facing dashboard as a subsequent layer and pilot. It consumes the common data and API; it does not define them.</li>
         </ul>
 
+        <h2>Pilot success</h2>
+        <p>Validate the common model with real unit data and workflows, connect selected pilot systems, demonstrate useful cross-unit information, and pilot the staff dashboard.</p>
+
         <h2>Dependencies</h2>
+        <p>Integrate with these IDS efforts rather than duplicating them:</p>
         <ul>
           <li>Identity and Access Management / LifeScience ID and role models (including privacy, security and audit).</li>
-          <li>Sample and project identifier services (e.g. BioSamples/EMBL-EBI instance, RAiD).</li>
-          <li>Order Portal and relevant unit systems where interoperability adds value.</li>
-          <li>Overall IDS strategy for cross-platform workflows and future automation.</li>
+          <li>Project and sample identifier services (e.g. BioSamples/EMBL-EBI instance, RAiD).</li>
+          <li>FAIR Data &amp; Metadata.</li>
+          <li>Data transfer and delivery.</li>
+          <li>Repositories.</li>
+          <li>Broader IDS architecture and digital services.</li>
+          <li>Order Portal and relevant unit systems, as sources to connect.</li>
         </ul>
       </main>
 
       <aside>
         <section class="card">
           <h2>High-level architecture</h2>
-          <!-- Replace src with the actual path in your repo, e.g. assets/img/... -->
-          <img
-            class="diagram"
-            src="img/FollowUp_projects_outlook.png"
-            alt="Diagram of project tracking: login, web interface, notification system, and data flows from Order Portal, iLAB, FMS and other unit systems."
-          />
+          <div class="arch" role="img" aria-label="Unit systems feed adapters and ingestion, then a common project model and database, then an API and data layer, which serves a staff dashboard and future user services. IAM, identifiers, governance and permissions cut across every layer.">
+            <div class="arch-row">
+              <span class="arch-chip">Order Portal</span>
+              <span class="arch-chip">iLAB</span>
+              <span class="arch-chip">FMS</span>
+              <span class="arch-chip">Other unit systems</span>
+            </div>
+            <div class="arch-step" aria-hidden="true"></div>
+            <div class="arch-box">Adapters / ingestion</div>
+            <div class="arch-step" aria-hidden="true"></div>
+            <div class="arch-box core">Common project model and database</div>
+            <div class="arch-step" aria-hidden="true"></div>
+            <div class="arch-box api">API / data layer</div>
+            <div class="arch-step" aria-hidden="true"></div>
+            <div class="arch-split">
+              <div class="arch-box">Staff dashboard</div>
+              <div class="arch-box later">Future user services</div>
+            </div>
+            <div class="arch-cross">
+              <span class="meta-label">Cross-cutting:</span>
+              IAM, identifiers (UserID, ProjectID, UnitID), governance and permissions.
+            </div>
+          </div>
           <p class="muted" style="margin-top:0.5rem;">
-            Simplified view of the project tracking service, integrating existing unit systems
-            (Order Portal, iLAB, FMS, others) into a central project database and web interface.
+            Unit systems are ingested into a common project model. The staff dashboard, and later user services, consume that API and data layer. They are not the foundation.
           </p>
         </section>
 
@@ -375,46 +485,46 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-milestone="M1" data-activity="Draft core model and its intended uses agreed">
+              <tr data-milestone="M1" data-activity="Agree on the draft core model and intended uses">
                 <td>M1</td>
                 <td class="when-cell">Nov 2026</td>
-                <td class="activity-cell">Draft core model and its intended uses agreed</td>
+                <td class="activity-cell">Agree on the draft core model and intended uses</td>
                 <td class="status-cell"><span class="milestone-status-badge not-started">○ Not started</span></td>
               </tr>
-              <tr data-milestone="M2" data-activity="Data ownership, governance and legal requirements clarified">
+              <tr data-milestone="M2" data-activity="Clarify data ownership, governance and legal requirements">
                 <td>M2</td>
                 <td class="when-cell">Feb 2027</td>
-                <td class="activity-cell">Data ownership, governance and legal requirements clarified</td>
+                <td class="activity-cell">Clarify data ownership, governance and legal requirements</td>
                 <td class="status-cell"><span class="milestone-status-badge not-started">○ Not started</span></td>
               </tr>
-              <tr data-milestone="M3" data-activity="Draft core model evaluated with real workflows and user/staff needs">
+              <tr data-milestone="M3" data-activity="Evaluate the model with real workflows">
                 <td>M3</td>
                 <td class="when-cell">Mar 2027</td>
-                <td class="activity-cell">Draft core model evaluated with real workflows and user/staff needs</td>
+                <td class="activity-cell">Evaluate the model with real workflows</td>
                 <td class="status-cell"><span class="milestone-status-badge not-started">○ Not started</span></td>
               </tr>
-              <tr data-milestone="M4" data-activity="Technical architecture and integration approach defined">
+              <tr data-milestone="M4" data-activity="Define architecture and integration approach">
                 <td>M4</td>
                 <td class="when-cell">Apr 2027</td>
-                <td class="activity-cell">Technical architecture and integration approach defined</td>
+                <td class="activity-cell">Define architecture and integration approach</td>
                 <td class="status-cell"><span class="milestone-status-badge not-started">○ Not started</span></td>
               </tr>
-              <tr data-milestone="M5" data-activity="Pilot and selected interfaces implemented">
+              <tr data-milestone="M5" data-activity="Implement and test the data foundation with pilots">
                 <td>M5</td>
                 <td class="when-cell">Dec 2027</td>
-                <td class="activity-cell">Pilot and selected interfaces implemented</td>
+                <td class="activity-cell">Implement and test the data foundation with pilots</td>
                 <td class="status-cell"><span class="milestone-status-badge not-started">○ Not started</span></td>
               </tr>
-              <tr data-milestone="M6" data-activity="Pilot-ready release and onboarding">
+              <tr data-milestone="M6" data-activity="Build and pilot the staff-facing dashboard">
                 <td>M6</td>
                 <td class="when-cell">Feb 2028</td>
-                <td class="activity-cell">Pilot-ready release and onboarding</td>
+                <td class="activity-cell">Build and pilot the staff-facing dashboard</td>
                 <td class="status-cell"><span class="milestone-status-badge not-started">○ Not started</span></td>
               </tr>
-              <tr data-milestone="M7" data-activity="Pilot evaluated and improvements defined">
+              <tr data-milestone="M7" data-activity="Evaluate the pilot and prepare scaling">
                 <td>M7</td>
                 <td class="when-cell">May 2028</td>
-                <td class="activity-cell">Pilot evaluated and improvements defined</td>
+                <td class="activity-cell">Evaluate the pilot and prepare scaling</td>
                 <td class="status-cell"><span class="milestone-status-badge not-started">○ Not started</span></td>
               </tr>
             </tbody>
@@ -425,7 +535,7 @@
 
     <footer class="project-footer">
       Last updated:
-      <span id="last-updated"></span>
+      7 October 2026
       · Repository:
       <a
         href="https://github.com/wpotrzebowski/ids-project-tracking"
@@ -447,14 +557,6 @@
       "/" +
       repoName +
       "/milestones?state=all&per_page=100";
-
-    function updateLastUpdated() {
-      const el = document.getElementById("last-updated");
-      if (el) {
-        const now = new Date();
-        el.textContent = now.toLocaleString();
-      }
-    }
 
     // Match a GitHub milestone by exact activity title, or by an M1–M7 prefix.
     function findMatchingMilestone(milestones, activityText, milestoneId) {
@@ -546,7 +648,6 @@
         });
     }
 
-    updateLastUpdated();
     loadMilestones();
   </script>
 </body>
