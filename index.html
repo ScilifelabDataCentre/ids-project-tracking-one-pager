@@ -157,7 +157,7 @@
       box-sizing: border-box;
     }
 
-    /* Milestone status badges for timeline table */
+    /* Milestone status badges */
 
     .milestone-status-badge {
       display: inline-flex;
@@ -281,11 +281,16 @@
       border-bottom: none;
     }
 
-    table td:first-child {
+    table td:first-child,
+    table td.when-cell {
       font-weight: 600;
       color: var(--accent-dark);
       white-space: nowrap;
       width: 1%;
+    }
+
+    table td.when-cell {
+      font-weight: 500;
     }
   </style>
 </head>
@@ -359,69 +364,57 @@
         </section>
 
         <section class="card">
-          <h2>Timelines</h2>
-          <table id="timelines-table">
+          <h2>Milestones</h2>
+          <table id="milestones-table">
             <thead>
               <tr>
-                <th>Timeline</th>
+                <th>Milestone</th>
+                <th>Target</th>
                 <th>Activity</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              <tr data-activity="Confirm pilot scope and collaboration model with selected units, team and IDS Area owners.">
-                <td>TBD</td>
-                <td class="activity-cell">Confirm pilot scope and collaboration model with selected units, team and IDS Area owners.</td>
+              <tr data-milestone="M1" data-activity="Draft core model and its intended uses agreed">
+                <td>M1</td>
+                <td class="when-cell">end of Nov 2026</td>
+                <td class="activity-cell">Draft core model and its intended uses agreed</td>
                 <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
               </tr>
-              <tr data-activity="Introduce concepts and collect insights about success criteria and pitfalls">
-                <td>TBD</td>
-                <td class="activity-cell">Introduce concepts and collect insights about success criteria and pitfalls</td>
+              <tr data-milestone="M2" data-activity="Data ownership, governance and legal requirements clarified">
+                <td>M2</td>
+                <td class="when-cell">end of Feb 2027</td>
+                <td class="activity-cell">Data ownership, governance and legal requirements clarified</td>
                 <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
               </tr>
-              <tr data-activity="Initial UX concept and key mock-ups for user, staff and management views agreed with pilot units.">
-                <td>TBD</td>
-                <td class="activity-cell">Initial UX concept and key mock-ups for user, staff and management views agreed with pilot units.</td>
+              <tr data-milestone="M3" data-activity="Draft core model evaluated with real workflows and user/staff needs">
+                <td>M3</td>
+                <td class="when-cell">end of Mar 2027</td>
+                <td class="activity-cell">Draft core model evaluated with real workflows and user/staff needs</td>
                 <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
               </tr>
-              <tr data-activity="Testing and evaluation with users and staff.">
-                <td>TBD</td>
-                <td class="activity-cell">Testing and evaluation with users and staff</td>
+              <tr data-milestone="M4" data-activity="Technical architecture and integration approach defined">
+                <td>M4</td>
+                <td class="when-cell">end of Apr 2027</td>
+                <td class="activity-cell">Technical architecture and integration approach defined</td>
                 <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
               </tr>
-              <tr data-activity="Define MVP architecture, APIs, notification strategy, logging and hosting approach.">
-                <td>TBD</td>
-                <td class="activity-cell">Define MVP architecture, APIs, notification strategy, logging and hosting approach.</td>
+              <tr data-milestone="M5" data-activity="Pilot and selected interfaces implemented">
+                <td>M5</td>
+                <td class="when-cell">end of Dec 2027</td>
+                <td class="activity-cell">Pilot and selected interfaces implemented</td>
                 <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
               </tr>
-              <tr data-activity="Build pilot: core web app for users and staff plus initial integrations (IAM, identifiers).">
-                <td>TBD</td>
-                <td class="activity-cell">Build pilot: core web app for users and staff plus initial integrations (IAM, identifiers).</td>
+              <tr data-milestone="M6" data-activity="Pilot-ready release and onboarding">
+                <td>M6</td>
+                <td class="when-cell">end of Feb 2028</td>
+                <td class="activity-cell">Pilot-ready release and onboarding</td>
                 <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
               </tr>
-              <tr data-activity="Pilot-ready release and onboarding of first units.">
-                <td>TBD</td>
-                <td class="activity-cell">Pilot-ready release and onboarding of first units.</td>
-                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
-              </tr>
-              <tr data-activity="Mid-pilot evaluation and improvements.">
-                <td>TBD</td>
-                <td class="activity-cell">Mid-pilot evaluation and improvements.</td>
-                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
-              </tr>
-              <tr data-activity="Roll-out to additional units.">
-                <td>TBD</td>
-                <td class="activity-cell">Roll-out to additional units.</td>
-                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
-              </tr>
-              <tr data-activity="Final evaluation and next-phase recommendation.">
-                <td>TBD</td>
-                <td class="activity-cell">Final evaluation and next-phase recommendation.</td>
-                <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
-              </tr>
-              <tr data-activity="Launch of Project Tracking as a SciLifeLab service and deliver playbook for further attachment of units.">
-                <td>TBD</td>
-                <td class="activity-cell">Launch of Project Tracking as a SciLifeLab service and deliver playbook for further attachment of units.</td>
+              <tr data-milestone="M7" data-activity="Pilot evaluated and improvements defined">
+                <td>M7</td>
+                <td class="when-cell">end of May 2028</td>
+                <td class="activity-cell">Pilot evaluated and improvements defined</td>
                 <td class="status-cell"><span class="milestone-status-badge">Loading…</span></td>
               </tr>
             </tbody>
@@ -463,35 +456,33 @@
       }
     }
 
-    // Match milestone title to activity description
-    function findMatchingMilestone(milestones, activityText) {
-      // Try exact match first
+    // Match a GitHub milestone by exact activity title, or by an M1–M7 prefix.
+    function findMatchingMilestone(milestones, activityText, milestoneId) {
       let match = milestones.find(m => m.title === activityText);
       if (match) return match;
-      
-      // Try partial match (milestone title contains key words from activity)
-      const activityWords = activityText.toLowerCase().split(/\s+/).filter(w => w.length > 3);
-      match = milestones.find(m => {
-        const titleLower = m.title.toLowerCase();
-        return activityWords.some(word => titleLower.includes(word));
-      });
-      
+
+      if (milestoneId) {
+        const idPattern = new RegExp("^" + milestoneId + "\\b", "i");
+        match = milestones.find(m => idPattern.test(m.title.trim()));
+      }
+
       return match;
     }
 
-    function updateTimelineWithMilestones(milestones) {
-      const table = document.getElementById("timelines-table");
+    function updateMilestones(milestones) {
+      const table = document.getElementById("milestones-table");
       if (!table) return;
 
       const rows = table.querySelectorAll("tbody tr");
       
       rows.forEach(function(row) {
         const activityText = row.getAttribute("data-activity");
+        const milestoneId = row.getAttribute("data-milestone");
         if (!activityText) return;
 
-        const milestone = findMatchingMilestone(milestones, activityText);
+        const milestone = findMatchingMilestone(milestones, activityText, milestoneId);
         const statusCell = row.querySelector(".status-cell");
-        const activityCell = row.querySelector("td:nth-child(2)");
+        const activityCell = row.querySelector(".activity-cell");
         
         if (!statusCell || !activityCell) return;
 
@@ -540,13 +531,12 @@
         })
         .then(function (data) {
           if (Array.isArray(data) && data.length > 0) {
-            updateTimelineWithMilestones(data);
+            updateMilestones(data);
           }
         })
         .catch(function (error) {
           console.error("Error loading milestones:", error);
-          // Show error state in timeline
-          const rows = document.querySelectorAll("#timelines-table tbody tr");
+          const rows = document.querySelectorAll("#milestones-table tbody tr");
           rows.forEach(function(row) {
             const statusCell = row.querySelector(".status-cell");
             if (statusCell) {
